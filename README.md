@@ -57,14 +57,14 @@ src/
    cd task-scheduler
 
 
-----------subscribers.txt----------------
+💠subscribers.txt
 json
 [
   "user1@example.com",
   "user2@example.com"
 ]
 
-------------------- pending_subscriptions.txt---------------------
+💠 pending_subscriptions.txt
 json
 {
   "user1@example.com": {
@@ -74,7 +74,7 @@ json
 }
 
 
--------------------------🌐 How to Run the Project----------------------------
+🌐 How to Run the Project
 🔧 Local Setup (XAMPP Recommended)
 Clone the repository
 
@@ -104,7 +104,7 @@ php src/cron.php
 
 
 
-------------------------💌 Email Format (Strict Requirement)---------------
+💌 Email Format (Strict Requirement)
 🔹 Verification Email
 Subject: Verify subscription to Task Planner
 HTML Body:
