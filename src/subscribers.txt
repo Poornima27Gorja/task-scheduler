@@ -2,5 +2,6 @@
     "poornima272321@gmail.com",
     "kappu0390@gmail.com",
     "hellokiddos195@gmail.com",
-    "poornimagorja2005@gmail.com"
+    "poornimagorja2005@gmail.com",
+    "sachitchandan@gmail.com"
 ]

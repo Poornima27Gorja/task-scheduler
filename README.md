@@ -1,310 +1,188 @@
-# Task Scheduler
-This assignment is a PHP-based task management system where users can add tasks to a common list and subscribe to receive hourly email reminders for pending tasks.
+# 🗓️ PHP Task Scheduler - Subscription & Reminder System
+
+This is a PHP-based Task Scheduler project submitted for an internship assignment. It allows users to manage tasks, subscribe for email reminders, receive hourly notifications for pending tasks, and unsubscribe at any time.
 
 ---
 
-## 🚀 Your Task
+## 🚀 Features Implemented
 
-Your objective is to implement the functionality in the **src/** directory while following these rules:
-
-✅ **DO NOT** change function names or modify the file structure.  
-✅ **DO NOT** modify anything outside the **src/** folder. You can add additional files if required inside **src** folder.
-✅ **DO NOT** use a database; use text files for storage.  
-✅ Implement all required functions in `functions.php`.  
-✅ Implement the main interface in `index.php`.  
-✅ Implement email verification and unsubscribe functionality.
-
----
-
-## 📝 Submission Steps [ Non adherence to this will cause disqualification ]
-1. **Clone** the repository to your local machine.  
-2. **Create a new branch** from the `main` branch. **Do not** push code directly to `main`.  
-3. **Implement** the required features inside the `src/` directory.  
-4. **Push** your code to your **branch** (not `main`).  
-5. **Raise a Pull Request (PR) only once** against the `main` branch when all your code is finalized.  
-   - **Do not raise multiple PRs.**  
-   - **Do not add multiple commits to a PR after submission.**  
-6. **Failure to follow these instructions will result in disqualification.**  
-7. **Wait** for your submission to be reviewed. Do not merge the PR.
-
----
-## ⚠️ Important Notes
-
-All form elements should always be visible on the page and should not be conditionally rendered. This ensures the assignment can be tested properly at the appropriate steps.
-
-Please ensure that if the base repository shows the original template repo, update it so that your repo's main branch is set as the base branch.
-
-**Recommended PHP version: 8.3**
-
----
-
-## 📌 Features to Implement
-
-### 1️⃣ **Task Management**
-
-- Add new tasks to the common list
-- Duplicate tasks should not be added.
+### ✅ Task Management
+- Add new tasks with a name
+- Prevent duplicate task names
 - Mark tasks as complete/incomplete
-- Delete tasks
-- Store tasks in `tasks.txt`
+- Delete tasks from the list
+- Tasks saved in `tasks.txt` (JSON format)
 
-### 2️⃣ **Email Subscription System**
+### 📧 Email Subscription System
+- User submits their email to subscribe
+- System generates a 6-digit code
+- Sends a verification email with a clickable link
+- Upon clicking, email is added to `subscribers.txt`
 
-- Users can subscribe with their email
-- Email verification process:
-  - System generates a unique 6-digit verification code
-  - Sends verification email with activation link
-  - Link contains email and verification code
-  - User clicks link to verify subscription
-  - System moves email from pending to verified subscribers
-- Store subscribers in `subscribers.txt`
-- Store pending verifications in `pending_subscriptions.txt`
+### 🔁 Hourly Reminder System
+- `cron.php` sends reminders every hour
+- Includes only pending tasks
+- Email includes an unsubscribe link
+- Configured using `setup_cron.sh` (auto CRON job setup)
 
-### 3️⃣ **Reminder System**
-
-- CRON job runs every hour
-- Sends emails to verified subscribers
-- Only includes pending tasks in reminders
-- Includes unsubscribe link in emails
-- Unsubscribe process:
-  - Every email includes an unsubscribe link
-  - Link contains encoded email address
-  - One-click unsubscribe removes email from subscribers
+### ❌ Unsubscribe Feature
+- One-click unsubscribe from reminder emails
+- Email removed from `subscribers.txt`
 
 ---
 
-## 📜 File Details & Function Stubs
+## 📂 Folder Structure
 
-You **must** implement the following functions in `functions.php`:
+src/
+├── cron.php # Sends reminder emails
+├── functions.php # All PHP logic (tasks + email)
+├── index.php # Main user interface
+├── style.css # Styling for index.php
+├── subscribe.php # Handles subscription form
+├── unsubscribe.php # Handles manual unsubscribe
+├── verify.php # Confirms email verification
+├── verify_unsubscribe.php # Confirms unsubscription
+├── setup_cron.sh # Adds CRON job automatically
+├── tasks.txt # Stores all tasks (JSON)
+├── subscribers.txt # Verified subscribers
+├── pending_subscriptions.txt # Pending email verifications
+├── unsubscribe_pending.txt # Pending unsubscribe codes
 
-```php
-function addTask($task_name) {
-    // Add a new task to the list
+
+### 🖥️ Localhost (XAMPP/LAMP)
+
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/Poornima27Gorja/task-scheduler.git
+   cd task-scheduler
+
+
+----------subscribers.txt----------------
+json
+[
+  "user1@example.com",
+  "user2@example.com"
+]
+
+------------------- pending_subscriptions.txt---------------------
+json
+{
+  "user1@example.com": {
+    "code": "123456",
+    "timestamp": 1718000000
+  }
 }
 
-function getAllTasks() {
-    // Get all tasks from tasks.txt
-}
 
-function markTaskAsCompleted($task_id, $is_completed) {
-    // Mark/unmark a task as complete
-}
+-------------------------🌐 How to Run the Project----------------------------
+🔧 Local Setup (XAMPP Recommended)
+Clone the repository
 
-function deleteTask($task_id) {
-    // Delete a task from the list
-}
+bash:
+git clone https://github.com/Poornima27Gorja/task-scheduler.git
+Move to XAMPP's htdocs folder
 
-function generateVerificationCode() {
-    // Generate a 6-digit verification code
-}
+C:/xampp/htdocs/task-scheduler/src/
+Start Apache Server
 
-function subscribeEmail($email) {
-    // Add email to pending subscriptions and send verification
-}
+Open the app in your browser
+http://localhost/task-scheduler/src/index.php
 
-function verifySubscription($email, $code) {
-    // Verify email subscription
-}
 
-function unsubscribeEmail($email) {
-    // Remove email from subscribers list
-}
+🕐 CRON Job Setup
+✅ Auto Setup (Linux/macOS)
+Run this in your terminal:
 
-function sendTaskReminders() {
-    // Sends task reminders to all subscribers
- 	// Internally calls  sendTaskEmail() for each subscriber
-}
+bash:
+bash src/setup_cron.sh
+This sets a CRON job to run cron.php every 1 hour and send pending task reminders.
 
-function sendTaskEmail( $email, $pending_tasks ) {
-	// Sends a task reminder email to a subscriber with pending tasks.
-}
-```
+🧪 Test manually (Windows)
+Run this manually in terminal/command prompt:
+bash:
+php src/cron.php
 
-## 📁 File Structure
 
-- `functions.php` (Core functions)
-- `index.php` (Main interface)
-- `verify.php` (Email verification handler)
-- `unsubscribe.php` (Unsubscribe handler)
-- `cron.php` (Reminder sender)
-- `setup_cron.sh` (CRON job setup)
-- `tasks.txt` (Task storage)
-- `subscribers.txt` (Verified subscribers)
-- `pending_subscriptions.txt` (Pending verifications)
 
-## 🔄 CRON Job Implementation
+------------------------💌 Email Format (Strict Requirement)---------------
+🔹 Verification Email
+Subject: Verify subscription to Task Planner
+HTML Body:
 
-📌 You must implement a **CRON job** that runs `cron.php` every 1 hour.  
-📌 **Do not just write instructions**—provide an actual **setup_cron.sh** script inside `src/`.  
-📌 **Your script should automatically configure the CRON job on execution.**
-
----
-
-### 🛠 Required Files
-
-- **`setup_cron.sh`** (Must configure the CRON job)
-- **`cron.php`** (Must handle sending GitHub updates via email)
-
----
-
-### 🚀 How It Should Work
-
-- The `setup_cron.sh` script should register a **CRON job** that executes `cron.php` every 1 hour.
-- The CRON job **must be automatically added** when the script runs.
-- The `cron.php` file should actually **fetch pending tasks** and **send emails** to subscribed users.
-
----
-
-## 📩 Email Handling
-
-✅ The email content must be in **HTML format** (not JSON).  
-✅ Use **PHP's `mail()` function** for sending emails.  
-✅ Each email should include an **unsubscribe link**.  
-✅ Store subscribers email in `subscribers.txt` (**Do not use a database**).
-✅ Store pending verifications in `pending_subscriptions.txt` (**Do not use a database**).
-✅ Each email should include an **unsubscribe link**.
-
----
-
-## ❌ Disqualification Criteria
-
-🚫 **Hardcoding** verification codes.  
-🚫 **Using a database** (use `subscribers.txt`).  
-🚫 **Modifying anything outside** the `src/` directory.  
-🚫 **Changing function names**.  
-🚫 **Not implementing a working CRON job**.  
-🚫 **Not formatting emails as HTML**.
-🚫 Using 3rd party libraries, only pure PHP is allowed.
-
----
-
-## 📌 Input & Button Formatting Guidelines
-
-### 📝 Task Management Inputs & Button:
-
-- Add task input must have `name="task-name"` and `id="task-name"`
-- Add task button must have `id="add-task"`
-
-#### ✅ Example:
-
-```html
-<input type="text" name="task-name" id="task-name" placeholder="Enter new task" required>
-<button type="submit" id="add-task">Add Task</button>
-```
-- Task list must have `class="task-list"`.
-- Task item in that list must have `class="task-item`
-- Task item must have have a checkbox `<input type="checkbox" class="task-status" >` so user can mark it done.
-- Once task item is completed add class `completed`. `<li class="task-item completed">`  
-- Task item should have a delete action with `class="delete-task"`.
-
-#### ✅ Example:
-
-```html
-<ul class="tasks-list">
-	<li class="task-item">
-		<input type="checkbox" class="task-status">
-		<button class="delete-task">Delete</button>
-	</li>	
-</ul>
-```
-
-### 📧 Email Input & Submission Button:
-
-- The email input field must have `name="email"`.
-- The submit button must have `id="submit-email"`.
-
-#### ✅ Example:
-
-```html
-<input type="email" name="email" required />
-<button id="submit-email">Submit</button>
-```
-
----
-
-## 📩 Email Content Guidelines
-
-#### ✅ Verification Email:
-
-- **Subject:** `Verify subscription to Task Planner`
-- **Body Format:**
-
-```html
 <p>Click the link below to verify your subscription to Task Planner:</p>
-';
 <p><a id="verification-link" href="{verification_link}">Verify Subscription</a></p>
-```
+🔹 Reminder Email
+Subject: Task Planner - Pending Tasks Reminder
+HTML Body:
 
-- Sender: no-reply@example.com
-
----
-
-### 📩 Email Content Guidelines
-
-⚠️ Note: The Subject and Body of the email must strictly follow the formats below, including the exact HTML structure.
-
-#### ✅ Task Reminder Email:
-
-- **Subject:** `Task Planner - Pending Tasks Reminder`
-- **Body Format:**
-
-```html
+html
 <h2>Pending Tasks Reminder</h2>
 <p>Here are the current pending tasks:</p>
 <ul>
-	<li>Task 1</li>
-	<li>Task 2</li>
+  <li>Task 1</li>
+  <li>Task 2</li>
 </ul>
 <p><a id="unsubscribe-link" href="{unsubscribe_link}">Unsubscribe from notifications</a></p>
-```
+📋 HTML Form & Input Requirements
+🔸 Add Task
+html
+Copy
+Edit
+<input type="text" name="task-name" id="task-name" required />
+<button id="add-task">Add Task</button>
+🔸 Email Subscription
+html
+Copy
+Edit
+<input type="email" name="email" required />
+<button id="submit-email">Submit</button>
+🔸 Task UI Class Names
+html
+Copy
+Edit
+<ul class="tasks-list">
+  <li class="task-item completed">
+    <input type="checkbox" class="task-status" />
+    <button class="delete-task">Delete</button>
+  </li>
+</ul>
+🛠 Functions Implemented in functions.php
+addTask($task_name)
 
----
-## 📊 Data Storage Format
+getAllTasks()
 
-All data must be stored in JSON format in the text files.
+markTaskAsCompleted($task_id, $is_completed)
 
-### Tasks Format (`tasks.txt`):
+deleteTask($task_id)
 
-Tasks must be stored as a JSON array of objects with the following schema:
+generateVerificationCode()
 
-```json
-[
-	{
-		"id": "unique_task_id",
-		"name": "Task Name",
-		"completed": false
-	},
-	{
-		"id": "another_task_id",
-		"name": "Another Task",
-		"completed": true
-	}
-]
-```
+subscribeEmail($email)
 
-### Subscribers Format (`subscribers.txt`):
+verifySubscription($email, $code)
 
-Subscribers must be stored as a JSON array of email addresses:
+unsubscribeEmail($email, $code)
 
-```json
-["user1@example.com", "user2@example.com"]
-```
+sendTaskReminders()
 
-### Pending Subscriptions Format (`pending_subscriptions.txt`):
+sendTaskEmail($email, $pending_tasks)
 
-Pending subscriptions must be stored as a JSON object with emails as keys:
 
-```json
-{
-	"user1@example.com": {
-		"code": "123456",
-		"timestamp": 1717694230
-	},
-	"user2@example.com": {
-		"code": "654321",
-		"timestamp": 1717694245
-	}
-}
-```
+------------------------------------------------------------
+🧾 Checklist for Evaluator
+✅ Task	Status
+Use of text files only	✔️
+All code inside src/	✔️
+HTML emails only	✔️
+Unsubscribe functionality	✔️
+CRON job setup with .sh	✔️
+Proper email structure	✔️
+One Pull Request from branch	✔️
+------------------------------------------------------------
 
-⚠️ **Important**: Ensuring your data follows these exact JSON schemas is critical for proper validation.
+
+👤 Author
+👩 Gorja Poornima
+📧 Email: poornima272321@gmail.com
+🌐 GitHub: Poornima27Gorja
+
